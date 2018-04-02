@@ -1,23 +1,38 @@
 import React, { Component } from 'react';
-import upper, {text1,text2, text3} from "./dataStore1";
+import AllJokes from './AllJokes';
+import AddJokes from './AddJokes';
+
 import './App.css';
-import person from "./dataStore2";
-const first = person.firstName;
-const email = person.email;
 
-console.log(first);
 
-class App extends Component {
+export default class App extends React.Component { //GRAY
+  constructor(props) {
+    super(props);
+    this.state = {
+      alljokes: props.JokeStore.getJokes()
+    };
+  }
+  saveJoke = (joke) => {
+    this.props.JokeStore.addJoke(joke);
+    this.setState({
+      alljokes: this.props.JokeStore.getJokes()
+    })
+  }
+
   render() {
     return (
-      <div className="App">
-      <p>{upper(text1)}</p>
-      <p>{upper(text2)}</p>
-      <p>{upper(text3)}</p>
-      <p>{upper(first)}</p>
-      <p>{upper(email)}</p>     
+      <div className="container row">
+         <p>Random Joke: <span> {this.props.JokeStore.getRandomJoke()}</span></p>
+      <div className='col1'>
+      <p className='head'>Add Joke</p>
+      <AddJokes saveJoke={this.saveJoke}/>
       </div>
+      <div className='col2'>
+      <p className='head'>All Jokes</p>
+      <AllJokes jokes={this.state.alljokes}/>
+      </div>
+      </div>
+
+
     );
-  }
-}
-export default App;
+  }}
